@@ -1,4 +1,3 @@
-
 #include <memory>
 #include <wayfire/config/types.hpp>
 #include <wayfire/per-output-plugin.hpp>
@@ -31,15 +30,11 @@
 static bool can_tile_view(const wayfire_toplevel_view view)
 {
     if (view->parent)
-    {
         return false;
-    }
 
     if (view->toplevel()->get_min_size() == view->toplevel()->get_max_size() &&
         view->toplevel()->get_min_size().width > 0 && view->toplevel()->get_min_size().height > 0)
-    {
         return false;
-    }
 
     return true;
 }
@@ -51,8 +46,8 @@ class tile_output_plugin_t final : public pointer_interaction_t, public custom_d
 public:
     explicit tile_output_plugin_t(output_t *wo)
     {
-        this->output = wo;
-        input_grab   = std::make_unique<input_grab_t>("simple-tile", output, nullptr, this, nullptr);
+        output = wo;
+        input_grab = std::make_unique<input_grab_t>("simple-tile", output, nullptr, this, nullptr);
         output->connect(&on_view_mapped);
         output->connect(&on_tile_request);
         output->connect(&on_fullscreen_request);
@@ -139,9 +134,7 @@ public:
     void stop_controller(const bool force_stop)
     {
         if (!output->is_plugin_active(grab_interface.name))
-        {
             return;
-        }
 
         // Deactivate plugin, so that others can react to the events
         output->deactivate_plugin(&grab_interface);
@@ -158,9 +151,7 @@ public:
     void attach_view(const wayfire_toplevel_view view, const std::optional<point_t> vp = {})
     {
         if (!view->get_wset())
-        {
             return;
-        }
 
         stop_controller(true);
         tile_workspace_set_data_t::get(view->get_wset()).attach_view(view, vp);
